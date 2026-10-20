@@ -1,0 +1,26 @@
+name: Rename MP3 to mp3
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rename files
+        run: |
+          for f in *.MP3; do
+            if [ -f "$f" ]; then
+              newname="${f%.MP3}.mp3"
+              git mv "$f" "$newname"
+            fi
+          done
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -A
+          git commit -m "Rename .MP3 to .mp3" || echo "Nothing to commit"
+          git push

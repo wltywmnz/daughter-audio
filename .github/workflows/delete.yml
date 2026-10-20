@@ -1,0 +1,19 @@
+name: Delete files
+on:
+  workflow_dispatch:
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git rm -f "mother.MP3" || true
+          git rm -f "mother.jpg" || true
+          git rm -f "mother.wav" || true
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -A
+          git commit -m "Delete mother files" || echo "Nothing to commit"
+          git push
